@@ -1,9 +1,5 @@
 from odoo import models, fields
 
-
-
-
-
 class Project(models.Model):
     _name = 'gpi.project'
     _description = 'Gestión de proyectos'
@@ -36,6 +32,7 @@ class Project(models.Model):
         ('finalizado', 'Finalizado'),
     ], string='Estado', default='nuevo')
 
+    # función para expandir todas las etapas en el kanban
     def _read_group_stage_ids(self, stages, domain, order):
         # stages es un recordset de gpi.project.stage
         # domain y order son parámetros de agrupación
