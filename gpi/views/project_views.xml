@@ -1,0 +1,119 @@
+<odoo>
+    <!-- Formulario de proyecto -->
+    <record id="project_view_form" model="ir.ui.view">
+        <field name="name">project.form</field>
+        <field name="model">gpi.project</field>
+        <field name="arch" type="xml">
+            <form string="Proyecto">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="stage_id"/>
+                    </group>
+                    <group>
+                        <field name="client_id"/>
+                        <field name="responsible_id"/>
+                    </group>
+                    <group>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Lista de proyectos -->
+    <record id="project_view_tree" model="ir.ui.view">
+        <field name="name">project.tree</field>
+        <field name="model">gpi.project</field>
+        <field name="arch" type="xml">
+            <tree string="Proyectos">
+                <field name="name"/>
+                <field name="stage_id"/>
+                <field name="client_id"/>
+                <field name="responsible_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Kanban con agrupación por etapa -->
+    <record id="project_view_kanban" model="ir.ui.view">
+        <field name="name">project.kanban</field>
+        <field name="model">gpi.project</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id" class="o_kanban_project">
+                <field name="name"/>
+                <field name="stage_id"/>
+                <field name="client_id"/>
+                <field name="responsible_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card">
+                            <div class="oe_kanban_content">
+                                <strong><field name="name"/></strong>
+                                <div class="text-muted">
+                                    <span>Cliente: </span><field name="client_id"/>
+                                    <span> • Responsable: </span><field name="responsible_id"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Acción principal: kanban primero -->
+    <record id="project_action" model="ir.actions.act_window">
+        <field name="name">Proyectos</field>
+        <field name="res_model">gpi.project</field>
+        <field name="view_mode">kanban,tree,form</field>
+    </record>
+
+    <!-- Menús -->
+    <menuitem id="project_menu_root" name="Gestión de Proyectos" sequence="10"/>
+    <menuitem id="project_menu" name="Proyectos" parent="project_menu_root" action="project_action" sequence="20"/>
+
+    <!-- Vista de etapas (mantenimiento básico) -->
+    <record id="view_stage_tree" model="ir.ui.view">
+        <field name="name">project.stage.tree</field>
+        <field name="model">gpi.project.stage</field>
+        <field name="arch" type="xml">
+            <tree string="Etapas">
+                <field name="name"/>
+                <field name="sequence"/>
+                <field name="fold"/>
+            </tree>
+        </field>
+    </record>
+
+     <!-- Formulario de etapa -->
+    <record id="stage_view_form" model="ir.ui.view">
+        <field name="name">project.stage.form</field>
+        <field name="model">gpi.project.stage</field>
+        <field name="arch" type="xml">
+            <form string="Etapa de Proyecto">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="sequence"/>
+                        <field name="fold"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Lista de etapas -->
+    <record id="stage_action" model="ir.actions.act_window">
+        <field name="name">Etapas de Proyecto</field>
+        <field name="res_model">gpi.project.stage</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="stage_menu" name="Etapas" parent="project_menu_root" action="stage_action" sequence="30"/>
+</odoo>
