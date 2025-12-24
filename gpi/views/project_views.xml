@@ -67,11 +67,41 @@
         </field>
     </record>
 
+    <!-- Vista de gráficos para estadísticas -->
+    <record id="project_view_graph" model="ir.ui.view">
+    <field name="name">project.graph</field>
+    <field name="model">gpi.project</field>
+    <field name="arch" type="xml">
+        <graph string="Análisis de proyectos" type="bar">
+            <!-- Métrica principal: contar proyectos -->
+            <field name="id" type="measure"/>
+
+            <!-- Dimensiones -->
+            <field name="stage_id" type="row"/>
+            <field name="responsible_id" type="col"/>
+        </graph>
+    </field>
+    </record>
+
+    <!-- Vista Pivot para estadísticas -->
+    <record id="project_view_pivot" model="ir.ui.view">
+    <field name="name">project.pivot</field>
+    <field name="model">gpi.project</field>
+    <field name="arch" type="xml">
+        <pivot string="Estadísticas">
+            <field name="project_count" type="measure"/>
+            <field name="stage_id" type="row"/>
+            <field name="responsible_id" type="col"/>
+            <field name="client_id" type="col"/>
+        </pivot>
+    </field>
+    </record>
+
     <!-- Acción principal: kanban primero -->
     <record id="project_action" model="ir.actions.act_window">
         <field name="name">Proyectos</field>
         <field name="res_model">gpi.project</field>
-        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_mode">kanban,tree,form,graph,pivot</field>
     </record>
 
     <!-- Menús -->
