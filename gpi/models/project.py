@@ -11,10 +11,18 @@ class Project(models.Model):
     end_date = fields.Date(string='Fecha de Fin')
 
     # Representa al cliente(Contacto) asociado al proyecto
-    client_id = fields.Many2one('res.partner', string='Cliente', required=True)
+    client_id = fields.Many2one(
+        'res.partner',
+        string='Cliente',
+        domain=[('user_ids','=',False)],
+        required=True)
 
     # Representa al usuario responsable del proyecto
-    responsible_id = fields.Many2one('res.users', string='Responsable', required=True)
+    responsible_id = fields.Many2one(
+        'res.users',
+        string='Responsable',
+        domain=[('share','=',False)],
+        required=True)
 
     # Etapa del proyecto que representa el estado del mismo con una relación con el modelo stage
     stage_id = fields.Many2one(
@@ -29,10 +37,15 @@ class Project(models.Model):
     # Estado del proyecto
     state = fields.Selection([
         ('new', 'Nuevo'),
-        ('in_progress', 'En Progreso'),
         ('in_checking', 'En Revisión'),
+        ('in_progress', 'En Progreso'),
         ('done', 'Finalizado'),
     ], string='Estado', default='new')
+
+    project_count = fields.Integer(
+        string="Conteo de Proyecto",
+        compute="_compute_project_count",
+        store=True)
 
     # función para expandir todas las etapas en el kanban
     # aunque no tengan proyectos relacionados
@@ -53,3 +66,7 @@ class Project(models.Model):
                  self.state = 'in_checking'
             elif self.stage_id.name.lower() == 'done':
                  self.state = 'done'
+
+    # función compute para recorrer el recordset de proyectos y asignar 1 al campo project_count
+    def _compute_project_count(self):
+        for rec in self: rec.project_count = 1
