@@ -42,6 +42,7 @@ class Project(models.Model):
         ('done', 'Finalizado'),
     ], string='Estado', default='new')
 
+    # Campo utilizado en la vista Pivot para contar la cantidad de proyectos
     project_count = fields.Integer(
         string="Conteo de Proyecto",
         compute="_compute_project_count",
